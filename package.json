@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/lmdodson/bamazon#readme",
   "dependencies": {
-    "inquirer": "^7.0.4"
+    "inquirer": "^7.0.4",
+    "mysql": "^2.18.1"
   }
 }
