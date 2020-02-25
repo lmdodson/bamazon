@@ -1,0 +1,22 @@
+{
+  "name": "bamazon",
+  "version": "1.0.0",
+  "description": "Node application simulating an Amazon-type store",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lmdodson/bamazon.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lmdodson/bamazon/issues"
+  },
+  "homepage": "https://github.com/lmdodson/bamazon#readme",
+  "dependencies": {
+    "inquirer": "^7.0.4"
+  }
+}
