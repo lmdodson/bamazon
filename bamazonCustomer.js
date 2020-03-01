@@ -19,8 +19,8 @@ connection.connect(function (err) {
     connection.query(
         "SELECT item_id, product_name, price FROM products",
         function (err, res) {
-            // display the table of available items
             if (err) throw err;
+            // display the table of available items
             console.table(res);
             // run the purchase function for user
             purchase();

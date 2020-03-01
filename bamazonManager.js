@@ -84,3 +84,61 @@ function inventoryView() {
         )
     })
 }
+
+function inventoryAdd() {
+    inquirer.prompt([{
+                name: "id",
+                type: "input",
+                message: "Which item id would you like to add to?",
+                validate: function (value) {
+                    var reg = /^\d+$/;
+                    return reg.test(value) || "Please provide a number";
+                }
+
+            },
+            {
+                name: "quantity",
+                type: "input",
+                message: "How much stock would you like to add?",
+                validate: function (value) {
+                    var reg = /^\d+$/;
+                    return reg.test(value) || "Please provide a number";
+                }
+            }
+        ])
+        .then(function (answer) {
+            // use the user response to query database
+            var search = "SELECT stock_quantity FROM products WHERE ?";
+
+            connection.query(search, {
+                item_id: answer.id
+            }, function (err, res) {
+                var stock = res[0].stock_quantity;
+                if (err) throw err;
+                // make sure a value exists for stock_quantity
+                if (stock !== "undefined" && stock !== null) {
+
+                    var userQuantity = parseInt(answer.quantity)
+                    var newStock = userQuantity + stock;
+                    stockUpdate(newStock, answer.id);
+                }
+                // console.log(res[0].stock_quantity)
+
+                connection.end()
+            })
+        })
+}
+
+function stockUpdate(newStock, id) {
+    var update = "UPDATE products set ? WHERE ?";
+    connection.query(update,
+        [{
+            stock_quantity: newStock
+        }, {
+            item_id: id
+        }],
+        function (err, res) {
+            if (err) throw err;
+            console.log("Your stock has been updated");
+        })
+}
