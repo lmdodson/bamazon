@@ -58,6 +58,7 @@ function purchase() {
                 item_id: answer.id
             }, function (err, res) {
                 if (err) throw err;
+                // change values from string
                 var userQuantity = parseInt(answer.quantity)
                 // console.log(res[0].stock_quantity, res[0].price)
                 // check the stock quantity against the user selection
@@ -81,7 +82,7 @@ function purchase() {
 }
 
 function stockUpdate(newStock, id) {
-    var update = "UPDATE products set ? where ?";
+    var update = "UPDATE products set ? WHERE ?";
     connection.query(update,
         [{
             stock_quantity: newStock

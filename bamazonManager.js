@@ -61,7 +61,7 @@ function productView() {
                 if (err) throw err;
                 // display the table of available items
                 console.table(res);
-                connection.end();
+                managerChoice();
             }
         )
     })
@@ -79,7 +79,10 @@ function inventoryView() {
                 if (err) throw err;
                 // display the table of low stock items
                 console.table(res);
-                connection.end();
+                console.log("===============================")
+
+
+                managerChoice();
             }
         )
     })
@@ -118,18 +121,20 @@ function inventoryAdd() {
                 // make sure a value exists for stock_quantity
                 if (stock !== "undefined" && stock !== null) {
 
-                    var userQuantity = parseInt(answer.quantity)
+                    var userQuantity = parseInt(answer.quantity);
                     var newStock = userQuantity + stock;
+                    // run the update function with updated value
                     stockUpdate(newStock, answer.id);
                 }
                 // console.log(res[0].stock_quantity)
 
-                connection.end()
+                managerChoice();
             })
         })
 }
 
 function stockUpdate(newStock, id) {
+    // adds the updated value to the database
     var update = "UPDATE products set ? WHERE ?";
     connection.query(update,
         [{
@@ -140,5 +145,55 @@ function stockUpdate(newStock, id) {
         function (err, res) {
             if (err) throw err;
             console.log("Your stock has been updated");
+            managerChoice();
         })
+}
+
+function productAdd() {
+    // ask the user for product details
+    inquirer.prompt([{
+            name: "name",
+            type: "input",
+            message: "What is the product name you would like to add?",
+        }, {
+            name: "dept",
+            type: "input",
+            message: "What department is the product in?"
+        }, {
+            name: "price",
+            type: "input",
+            message: "What is the product price?",
+            validate: function (value) {
+                var regexp = /^\d+\.\d{0,2}$/;
+                return regexp.test(value) || "Please provide a dollar value";
+            }
+
+        }, {
+            name: "qty",
+            type: "input",
+            message: "What is the product quantity?",
+            validate: function (value) {
+                var reg = /^\d+$/;
+                return reg.test(value) || "Please provide a number";
+            }
+        }])
+        .then(function (answer) {
+            var add = "INSERT INTO products SET ?";
+            // change values from string
+            var price = parseFloat(answer.price);
+            var qty = parseInt(answer.qty);
+
+
+            connection.query(add, {
+                product_name: answer.name,
+                department_name: answer.dept,
+                price: price,
+                stock_quantity: qty
+            }, function (err, res) {
+                if (err) throw err;
+                console.log("New product added")
+                console.log("===============================")
+                managerChoice();
+            })
+        });
 }
