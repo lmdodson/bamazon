@@ -66,3 +66,21 @@ function productView() {
         )
     })
 }
+
+function inventoryView() {
+    connection.connect(function (err) {
+        if (err) throw err;
+        // console.log the success
+        console.log("connected as id " + connection.thread);
+        // if connection is successful, proceed with data query
+        connection.query(
+            "SELECT product_name, stock_quantity FROM products WHERE stock_quantity < 5",
+            function (err, res) {
+                if (err) throw err;
+                // display the table of low stock items
+                console.table(res);
+                connection.end();
+            }
+        )
+    })
+}
